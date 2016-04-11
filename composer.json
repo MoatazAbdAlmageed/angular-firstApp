@@ -1,0 +1,12 @@
+{
+    "name": "root/first-app",
+    "authors": [
+        {
+            "name": "Moataz Mohammady",
+            "email": "moataz.mohammady@gmail.com"
+        }
+    ],
+    "require": {
+        "erusev/parsedown": "~1.0"
+    }
+}

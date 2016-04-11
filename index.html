@@ -1,0 +1,257 @@
+<!DOCTYPE html >
+<html ng-app="minMax">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>First App</title>
+
+    <link href="bootstrap.min.css" rel="stylesheet">
+    <link href="bower_components/ladda/dist/ladda-themeless.min.css" rel="stylesheet">
+    <link href="bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+
+</head>
+
+<body ng-init="name='Moataz';check=false">
+<nav class="navbar navbar-default" role="navigation">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">Home</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse navbar-ex1-collapse">
+        <ul class="nav navbar-nav">
+            <li class="active"><a href="#">Link</a></li>
+            <li><a href="#">Link</a></li>
+        </ul>
+        <form class="navbar-form navbar-left" role="search">
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="Search">
+            </div>
+            <button type="submit" class="btn btn-default">Submit</button>
+        </form>
+        <ul class="nav navbar-nav navbar-right">
+            <li><a href="#">Link</a></li>
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                    <li><a href="#">Action</a></li>
+                    <li><a href="#">Another action</a></li>
+                    <li><a href="#">Something else here</a></li>
+                    <li><a href="#">Separated link</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div><!-- /.navbar-collapse -->
+</nav>
+
+<div class="container">
+
+    <hr>
+    <div class="row">
+        <div class="col-lg-6" ng-controller="minMaxListCTRL">
+
+
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Users from codeigniter </h3>
+                    <p>using <b>$http.get</b></p>
+                </div>
+                <div class="panel-body">
+                    <pre> {{codeigniterUsers | json}}</pre>
+                </div>
+            </div>
+
+
+            <div class="form-group"><label for="searchName">Search Name</label> <input
+                    ng-model="search.$"
+                    type="text"
+                    class="form-control"
+                    name="searchName"
+                    placeholder="search Name"></div>
+
+            <table class="table table-bordeyellow">
+
+
+                <tr>
+                    <th>#</th>
+                    <th>Name
+
+
+                        <i ng-style="{'color':order == 'name' ? 'yellow':''}"
+                           ng-click="setOrder('name')" class="fa fa-arrow-up"></i>
+                        <i ng-style="{'color':order == '-name' ? 'yellow':''}" ng-click="setOrder('-name')"
+                           class="fa fa-arrow-down"></i>
+
+
+                    </th>
+                    <th>Email
+                        <i ng-style="{'color':order == 'email' ? 'yellow':''}" ng-click="setOrder('email')"
+                           class="fa fa-arrow-up"></i>
+                        <i ng-style="{'color':order == '-email' ? 'yellow':''}" ng-click="setOrder('-email')"
+                           class="fa fa-arrow-down"></i>
+                    </th>
+                    <th>username
+                        <i ng-style="{'color':order == 'username' ? 'yellow':''}" ng-click="setOrder('username')"
+                           class="fa fa-arrow-up"></i>
+                        <i ng-style="{'color':order == '-username' ? 'yellow':''}" ng-click="setOrder('-username')"
+                           class="fa fa-arrow-down"></i>
+
+                    </th>
+                </tr>
+
+                <tr ng-repeat="person in filtedPersons =(jsonplaceholderusers |filter:search |orderBy:order)"
+                    ng-style="{'background':person.email == SelectedPerson.email ? 'yellow':''}"
+                    ng-click="SelectPerson(person)">
+
+
+                    <td>{{$index}}</td>
+                    <td>{{person.name}}</td>
+                    <td>{{person.email}}</td>
+
+
+                    <td>{{person.username }}</td>
+                </tr>
+                <tr ng-show="filtedPersons.length==0">
+                    <td colspan="4"><p class="alert alert-danger"><b>{{search.$}}</b> not found</p></td>
+                </tr>
+
+            </table>
+        </div>
+
+        <div class="col-lg-6" ng-controller="minMaxDetailCTRL">
+
+
+            <div class="row">
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Users from codeigniter</h3>
+                        <p>using <b>ngResource</b></p>
+                    </div>
+                    <div class="panel-body">
+                        <p><b>users</b></p>
+                        <pre>{{ users | json}}</pre>
+
+                        <p><b>user</b></p>
+                        <pre>{{ user | json}}</pre>
+                    </div>
+
+                </div>
+            </div>
+
+
+            <div class="panel panel-danger">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Person Details</h3>
+                </div>
+                <div class="panel-body">
+                    <ul>
+                        <li>street:{{SelectedPerson.address.street}}</li>
+                        <li>suite:{{SelectedPerson.address.suite}}</li>
+                        <li>city:{{SelectedPerson.address.city}}</li>
+                        <li>zipcode:{{SelectedPerson.address.zipcode}}</li>
+                        <li>lat:{{SelectedPerson.address.geo.lat}}</li>
+                        <li>lng:{{SelectedPerson.address.geo.lng}}</li>
+                        <li>phone:{{SelectedPerson.phone}}</li>
+                        <li>website:{{SelectedPerson.website}}</li>
+                        <li>company.name:{{SelectedPerson.company.name}}</li>
+                        <li>company.catchPhrase:{{SelectedPerson.company.catchPhrase}}</li>
+                        <li>company.bs:{{SelectedPerson.company.bs}}</li>
+                        <li><img class="img-circle" width="150px" ng-src="img/{{SelectedPerson.img}}"></li>
+                    </ul>
+                </div>
+            </div>
+
+
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <form ng-submit="onSubmit(Theform.$valid)" novalidate="novalidate" name="Theform"
+              validate-non-visible-controls="false"
+              validate-on-form-submit="true"
+              disable-dynamic-validatio_n>
+
+            <div class="form-group"><label for="age">age</label> <input
+                    ng-model="formModel.age"
+                    type="age"
+                    class="form-control"
+                    name="age"
+                    id="age" requiyellow
+                    placeholder="age"></div>
+            <div class="form-group"><label for="name">name</label> <input
+                    ng-model="formModel.name"
+                    type="text"
+
+                    ng-pattern="/^[A-Za-z0-9_]{1,15}$/"
+                    ng-minlength="5"
+                    class="form-control"
+                    id="name"
+                    name="name"
+                    placeholder="name" requiyellow>
+            </div>
+            <div class="form-group"><label for="email">email</label> <input
+                    ng-model="formModel.email"
+                    type="email"
+                    class="form-control"
+                    name="email"
+                    id="email" requiyellow
+                    placeholder="email"></div>
+            <div class="checkbox"><label> <input ng-model="formModel.checkbox" type="checkbox"> Check me out
+            </label>
+            </div>
+            <!--<button ng-click="onSubmit()" type="submit" class="btn btn-default">Submit</button>-->
+            <button type="submit" class="btn btn-default">Submit</button>
+            <button class="btn btn-primary" ladda="submitting" ng-click="login()" data-style="expand-left">
+                Login
+            </button>
+        </form>
+
+    </div>
+    <hr/>
+
+    <div class="row">
+
+        <div class="col-lg-3">
+
+
+            <h3>Theform.$error</h3>
+            <pre>
+    {{Theform.age.$error | json}}
+                </pre>
+        </div>
+
+        <div class="col-lg-9">
+
+            <h3>Theform</h3>
+            <pre>
+    {{Theform | json}}
+            </pre>
+
+        </div>
+
+    </div>
+
+
+</div>
+</div>
+
+<!-- including js files -->
+<script src="bower_components/angular/angular.min.js"></script>
+<script src="bower_components/angular-auto-validate/dist/jcs-auto-validate.min.js"></script>
+<script src="bower_components/angular-resource/angular-resource.min.js"></script>
+<script src="bower_components/spin.js/spin.js"></script>
+<script src="bower_components/ladda/js/ladda.js"></script>
+<script src="bower_components/angular-ladda/dist/angular-ladda.min.js"></script>
+<script src="main.js"></script>
+</body>
+</html>
