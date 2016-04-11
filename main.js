@@ -54,56 +54,72 @@ app.service('users', function ($resource) {
     return $resource("http://codeigniter.dev/index.php/welcome/getUsers/");
 });
 
+app.service('user', function ($resource) {
+    return $resource("http://codeigniter.dev/index.php/welcome/getUser/:id");
+});
+
 /**
  * Get specific user by id
  */
-app.service('user', function ($resource) {
-    var user = $resource("http://codeigniter.dev/index.php/welcome/getUser/:id");
+// app.service('user', function ($resource) {
+//     var user = $resource("http://codeigniter.dev/index.php/welcome/getUser/:id");
+//
+//     var self = {
+//         'page': 1,
+//         'hasMore': true,
+//         'isLoading': false,
+//         'person': [],
+//         'loadContact': user.get({id: 0}),
+//     };
+//     return self;
+//
+// });
 
-    var self = {
-        'page': 1,
-        'hasMore': true,
-        'isLoading': false,
-        'person': [],
-        'loadContact': user.get({id: 0}),
-    };
-    return self;
+// app.service('jsonplaceholderusers', function ($resource) {
+//     // return $resource("http://localhost:3000/users");
+//     return $resource("http://jsonplaceholder.typicode.com/users");
+//     // return $resource("http://codeigniter.dev/index.php/welcome/getUsers/");
+//     // var rs = $resource("http://localhost:3000/users");
+//     //s
+//     // var self = {
+//     //     'page': 1,
+//     //     'hasMore': true,
+//     //     'isLoading': false,
+//     //     'person': [],
+//     //     'loadContact': rs.get()
+//     // };
+//     // return $resource("http://localhost:3000/users");
+//
+// });
 
+app.service("jsonplaceholderusers", function ($resource) {
+    return $resource(
+        'http://localhost:3000/users', {}, {
+            get: {
+                method: 'GET',
+                isArray: true,
+                transformResponse: function (data, headers) {
+                    //
+                    // transform to array of objects
+                    // console.log(data);
+                    return data;
+                }
+            }
+        }
+    );
 });
-
-app.service('jsonplaceholderusers', function ($resource) {
-    // return $resource("http://localhost:3000/users");
-    var rs = $resource("http://localhost:3000/users");
-
-    var self = {
-        'page': 1,
-        'hasMore': true,
-        'isLoading': false,
-        'person': [],
-        'loadContact': rs.get()
-    };
-    return $resource("http://localhost:3000/users");
-
-});
-
-
 /**
  * Add user
  */
 
 
+app.controller('minMaxDetailCTRL', function ($scope, jsonplaceholderusers, users, user) {
 
 
-
-
-
-app.controller('minMaxDetailCTRL', function (jsonplaceholderusers, $scope, users, user) {
-
-
-    console.log(jsonplaceholderusers.get());
+    // console.log(jsonplaceholderusers.get());
+    // $scope.jsonplaceholderusers = jsonplaceholderusers.get();
     //jsonplaceholder
     // console.log(jsonplaceholderusers);
-    // $scope.jsonplaceholderusers = json
     // var
     // placeholderusers;
 
@@ -126,10 +142,10 @@ app.controller('minMaxDetailCTRL', function (jsonplaceholderusers, $scope, users
 
     // Injected in your controller
     $scope.users = users.get();
-    // $scope.user = user.get({id: 0});
+    $scope.user = user.get({id: 0});
 });
 
-app.controller('minMaxListCTRL', function ($scope, $http, $rootScope) {
+app.controller('minMaxListCTRL', function (jsonplaceholderusers, $scope, $http, $rootScope) {
 
     /**
      * How to Improve Your REST Calls in Angular With ngResource
@@ -142,6 +158,8 @@ app.controller('minMaxListCTRL', function ($scope, $http, $rootScope) {
         $scope.codeigniterUsers = result.data;
     });
 
+
+    $scope.persons = jsonplaceholderusers.query();
 
     //handle this with ngResource
 

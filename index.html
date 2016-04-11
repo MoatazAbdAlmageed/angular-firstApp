@@ -106,7 +106,7 @@
                     </th>
                 </tr>
 
-                <tr ng-repeat="person in filtedPersons =(jsonplaceholderusers |filter:search |orderBy:order)"
+                <tr ng-repeat="person in persons"
                     ng-style="{'background':person.email == SelectedPerson.email ? 'yellow':''}"
                     ng-click="SelectPerson(person)">
 
